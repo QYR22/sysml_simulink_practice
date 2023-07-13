@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+int x;//基础参数
+int s; //状态改变量
+chan flag, i ;//flag用作传递共享变量，i标志停下</declaration>
+	<template>
+		<name x="5" y="5">MPC</name>
+		<declaration>// Place local declarations here.</declaration>
+		<location id="id0" x="-842" y="-289">
+			<name x="-852" y="-323">Start</name>
+		</location>
+		<location id="id1" x="-561" y="-153">
+			<name x="-587" y="-136">Outputed</name>
+		</location>
+		<location id="id2" x="-689" y="-289">
+			<name x="-699" y="-323">Ready</name>
+		</location>
+		<location id="id3" x="-561" y="-289">
+			<name x="-571" y="-323">Calc</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-637" y="-237">flag?</label>
+			<nail x="-603" y="-229"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-519" y="-246">flag!</label>
+			<label kind="assignment" x="-519" y="-229">s = x + s</label>
+			<nail x="-519" y="-230"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="select" x="-808" y="-315">m:int[1,5]</label>
+			<label kind="assignment" x="-799" y="-289">x = m</label>
+		</transition>
+	</template>
+	<template>
+		<name>Car</name>
+		<location id="id4" x="-1037" y="-773">
+			<name x="-1047" y="-807">Start</name>
+		</location>
+		<location id="id5" x="-884" y="-773">
+			<name x="-894" y="-807">Run</name>
+		</location>
+		<location id="id6" x="-731" y="-773">
+			<name x="-714" y="-781">Sample</name>
+			<committed/>
+		</location>
+		<location id="id7" x="-884" y="-680">
+			<name x="-901" y="-671">Stop</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-909" y="-748">s &gt;= 10</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="select" x="-995" y="-799">s0:int[1,5]</label>
+			<label kind="assignment" x="-986" y="-773">s = s0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-816" y="-739">flag!</label>
+			<nail x="-799" y="-739"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="select" x="-833" y="-850">u:int[0,2]</label>
+			<label kind="guard" x="-824" y="-799">s &lt; 10</label>
+			<label kind="synchronisation" x="-816" y="-866">flag?</label>
+			<label kind="assignment" x="-833" y="-833">s = s + u</label>
+			<nail x="-799" y="-807"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+// List one or more processes to be composed into a system.
+system MPC,Car;
+
+    </system>
+	<queries>
+		<query>
+			<formula>E&lt;&gt; Car.Sample and MPC.Outputed</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Car.Run and MPC.Calc</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Car.Stop
+</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
