@@ -3,8 +3,8 @@
 
 **文件组成：**     
 **sysML图：**  
-liuSysML.qea: 刘珂负责部分
-xieSysML.qea： 谢卓颖负责部分
+liuSysML.qea: lk负责部分
+xieSysML.qea： xzy负责部分
 **轨迹规划情景：**  
 chapter5.cpar：轨迹规划的车辆carsim建模参数  
 Chap5.mdl/Chap5.mdl.r2021b: 对轨迹规划方案进行建模的simulink文件  
